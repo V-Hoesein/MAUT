@@ -12,7 +12,6 @@ function is_able($action)
             'user.index', 'user.create', 'user.store', 'user.edit', 'user.update', 'user.destroy', 'user.cetak',
             'user.password', 'user.password.update', 'user.logout', 'user.profil', 'user.profil.update',
             'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
-            'subkriteria.index', 'subkriteria.create', 'subkriteria.store', 'subkriteria.edit', 'subkriteria.update', 'subkriteria.destroy', 'subkriteria.cetak',
             'rel_kriteria.index', 'rel_kriteria.simpan',
             'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
             'rel_alternatif.index', 'rel_alternatif.edit', 'rel_alternatif.update',

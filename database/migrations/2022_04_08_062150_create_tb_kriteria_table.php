@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('kode_kriteria', 16)->primary();
             $table->string('nama_kriteria')->nullable();
             $table->double('bobot')->nullable();
-            $table->string('atribut', 16)->nullable();
             $table->timestamps();
         });
     }

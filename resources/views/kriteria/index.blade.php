@@ -25,7 +25,6 @@
 				<th>No</th>
 				<th>Kode</th>
 				<th>Nama kriteria</th>
-				<th>Atribut</th>
 				<th>Bobot</th>
 				<th>Aksi</th>
 			</thead>
@@ -34,7 +33,6 @@
 				<td>{{ ($rows->currentPage() - 1) * $limit + $key + 1}}</td>
 				<td>{{ $row->kode_kriteria }}</td>
 				<td>{{ $row->nama_kriteria }}</td>
-				<td>{{ $row->atribut }}</td>
 				<td>{{ round($row->bobot, 4) }}</td>
 				<td>
 					<a class="btn btn-sm btn-info" href="{{ route('kriteria.edit', $row) }}" {{ is_hidden('kriteria.edit') }}><i class="fa fa-edit"></i> Ubah</a>

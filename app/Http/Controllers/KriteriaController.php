@@ -51,20 +51,16 @@ class KriteriaController extends Controller
         $request->validate([
             'kode_kriteria' => 'required|unique:tb_kriteria',
             'nama_kriteria' => 'required',
-            'atribut' => 'required',
             'bobot' => 'required',
         ], [
             'kode_kriteria.required' => 'Kode kriteria harus diisi',
             'kode_kriteria.unique' => 'Kode kriteria harus unik',
             'nama_kriteria.required' => 'Nama kriteria harus diisi',
-            'atribut.required' => 'Atribut harus diisi',
             'bobot.required' => 'Bobot harus diisi',
         ]);
         $kriteria = new Kriteria($request->all());
         $kriteria->save();
-
-        query("INSERT INTO tb_rel_alternatif (kode_alternatif, kode_kriteria) SELECT kode_alternatif, ? FROM tb_alternatif", [$kriteria->kode_kriteria]);
-        return redirect('kriteria')->with('message', 'Data berhasil ditambah!');
+        return redirect()->route('kriteria.index')->with('success', 'Data kriteria berhasil dissimpan');
     }
 
     /**
@@ -102,16 +98,13 @@ class KriteriaController extends Controller
     {
         $request->validate([
             'nama_kriteria' => 'required',
-            'atribut' => 'required',
             'bobot' => 'required',
         ], [
             'nama_kriteria.required' => 'Nama kriteria harus diisi',
-            'atribut.required' => 'Atribut harus diisi',
             'bobot.required' => 'Bobot harus diisi',
         ]);
         $kriteria = Kriteria::findOrFail($kriteria);
         $kriteria->nama_kriteria = $request->nama_kriteria;
-        $kriteria->atribut = $request->atribut;
         $kriteria->bobot = $request->bobot;
         $kriteria->save();
         return redirect('kriteria')->with('message', 'Data berhasil diubah!');
@@ -127,7 +120,6 @@ class KriteriaController extends Controller
     {
         $kriteria = Kriteria::findOrFail($kriteria);
         $kriteria->delete();
-        query("DELETE FROM tb_rel_alternatif WHERE kode_kriteria NOT IN (SELECT kode_kriteria FROM tb_kriteria)");
-        return redirect('kriteria')->with('message', 'Data berhasil dihapus!');
+        return redirect('kriteria')->with('message','Deleted!');
     }
 }

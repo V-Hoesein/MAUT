@@ -73,7 +73,7 @@
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Hasil Akhir
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">MAUT WASPAS</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">MAUT</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-tag fa-2x text-gray-300"></i>

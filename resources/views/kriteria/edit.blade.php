@@ -18,12 +18,6 @@
 						<input class="form-control" type="text" name="nama_kriteria" value="{{ old('nama_kriteria', $row->nama_kriteria) }}">
 					</div>
 					<div class="mb-3">
-						<label>Atribut <span class="text-danger">*</span></label>
-						<select class="form-control" name="atribut">
-							<?= get_atribut_option(old('atribut', $row->atribut)) ?>
-						</select>
-					</div>
-					<div class="mb-3">
 						<label>Bobot <span class="text-danger">*</span></label>
 						<input class="form-control" type="text" name="bobot" value="{{ old('bobot', $row->bobot) }}" />
 					</div>
