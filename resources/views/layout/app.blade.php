@@ -70,25 +70,6 @@
                     <span>Alternatif</span></a>
             </li>
 
-            <li class="nav-item" {{ is_hidden('rel_alternatif.index') }}>
-                <a class="nav-link" href="{{ route('rel_alternatif.index') }}">
-                    <i class="fas fa-fw fa-signal"></i>
-                    <span>Penilaian</span></a>
-            </li>
-
-            <li class="nav-item" {{ is_hidden('hitung.index') }}>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu1" aria-expanded="true" aria-controls="menu1">
-                    <i class="fas fa-fw fa-calculator"></i>
-                    <span>Perhitungan</span>
-                </a>
-                <div id="menu1" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('hitung.maut') }}">MAUT</a>
-                        <a class="collapse-item" href="{{ route('hitung.waspas') }}">WASPAS</a>
-                    </div>
-                </div>
-            </li>
-
             <li class="nav-item" {{ is_hidden('hitung.hasil') }}>
                 <a class="nav-link" href="{{ route('hitung.hasil') }}">
                     <i class="fas fa-fw fa-calendar"></i>
