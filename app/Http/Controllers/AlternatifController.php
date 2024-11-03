@@ -60,7 +60,6 @@ class AlternatifController extends Controller
         $alternatif = new Alternatif($request->all());
         $alternatif->save();
 
-        query("INSERT INTO tb_rel_alternatif (kode_alternatif, kode_kriteria) SELECT ?, kode_kriteria FROM tb_kriteria", [$alternatif->kode_alternatif]);
 
         return redirect('alternatif')->with('message', 'Data berhasil ditambah!');
     }

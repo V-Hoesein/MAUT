@@ -6,7 +6,6 @@
 		<th>No</th>
 		<th>Kode</th>
 		<th>Nama alternatif</th>
-		<th>Keterangan</th>
 	</thead>
 	<?php $no = 1 ?>
 	@foreach($rows as $key => $row)
@@ -14,7 +13,6 @@
 		<td>{{ $no++ }}</td>
 		<td>{{ $row->kode_alternatif }}</td>
 		<td>{{ $row->nama_alternatif }}</td>
-		<td>{{ $row->keterangan }}</td>
 	</tr>
 	@endforeach
 </table>

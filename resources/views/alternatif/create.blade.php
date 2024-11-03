@@ -16,10 +16,6 @@
 						<label>Nama alternatif <span class="text-danger">*</span></label>
 						<input class="form-control" type="text" name="nama_alternatif" value="{{ old('nama_alternatif') }}" />
 					</div>
-					<div class="mb-3">
-						<label>Keterangan</label>
-						<input class="form-control" type="text" name="keterangan" value="{{ old('keterangan') }}" />
-					</div>
 				</div>
 			</div>
 		</div>
