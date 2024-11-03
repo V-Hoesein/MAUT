@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('alternatif_kode')->references('kode_alternatif')->on('tb_alternatif')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kriteria_kode');
             $table->foreign('kriteria_kode')->references('kode_kriteria')->on('tb_kriteria')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('gaya_belajar');
+            $table->foreign('gaya_belajar')->references('name')->on('tb_gaya')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

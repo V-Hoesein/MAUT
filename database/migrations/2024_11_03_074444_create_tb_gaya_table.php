@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_kelas', function (Blueprint $table) {
+        Schema::create('tb_gaya', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_kelas')->index();
+            $table->string('name')->unique()->index();
             $table->timestamps();
         });
     }
 
-    /**w
+    /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_kelas');
+        Schema::dropIfExists('tb_gaya');
     }
 };
