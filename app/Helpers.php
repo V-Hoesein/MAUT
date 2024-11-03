@@ -13,6 +13,7 @@ function is_able($action)
             'user.password', 'user.password.update', 'user.logout', 'user.profil', 'user.profil.update',
             'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
             'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
+            'kelas.index', 'kelas.create', 'kelas.store', 'kelas.edit', 'kelas.update', 'kelas.destroy', 'kelas.cetak',
             'hitung.index', 'hitung.maut', 'hitung.maut.cetak', 'hitung.waspas', 'hitung.waspas.cetak', 'hitung.hasil', 'hitung.hasil.cetak',
         ],
         'user' => [
@@ -92,7 +93,7 @@ function get_rel_alternatif()
     return $arr;
 }
 
-function get_rel_nilai()
+function get_rel_kelas()
 {
     $rows = get_results("SELECT * FROM tb_rel_alternatif r LEFT JOIN tb_subkriteria s ON s.id_subkriteria=r.id_subkriteria ORDER BY kode_alternatif, r.kode_kriteria");
     $arr = array();

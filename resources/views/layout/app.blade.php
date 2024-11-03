@@ -58,16 +58,16 @@
                     <span>Kriteria</span></a>
             </li>
 
-            <li class="nav-item" {{ is_hidden('subkriteria.index') }}>
-                <a class="nav-link" href="{{ route('subkriteria.index') }}">
-                    <i class="fas fa-fw fa-tags"></i>
-                    <span>Subkriteria</span></a>
-            </li>
-
             <li class="nav-item" {{ is_hidden('alternatif.index') }}>
                 <a class="nav-link" href="{{ route('alternatif.index') }}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Alternatif</span></a>
+            </li>
+
+            <li class="nav-item" {{ is_hidden('kelas.index') }}>
+                <a class="nav-link" href="{{ route('kelas.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Kelas</span></a>
             </li>
 
             <li class="nav-item" {{ is_hidden('hitung.hasil') }}>

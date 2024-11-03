@@ -29,26 +29,15 @@ Route::middleware(['auth', 'level'])->group(
 
         Route::get('/kriteria/cetak', [KriteriaController::class, 'cetak'])->name('kriteria.cetak');
         Route::resource('/kriteria', KriteriaController::class);
-
-        Route::get('/subkriteria/cetak', [SubkriteriaController::class, 'cetak'])->name('subkriteria.cetak');
-        Route::resource('/subkriteria', SubkriteriaController::class);
-
-        Route::get('/rel_alternatif/cetak', [Rel_AlternatifController::class, 'cetak'])->name('rel_alternatif.cetak');
-        Route::get('/rel_alternatif/import', [Rel_AlternatifController::class, 'import'])->name('rel_alternatif.import');
-        Route::post('/rel_alternatif/import_action', [Rel_AlternatifController::class, 'import_action'])->name('rel_alternatif.import_action');
-        Route::resource('/rel_alternatif', Rel_AlternatifController::class);
+        
+        Route::get('/kelas/cetak', [KriteriaController::class, 'cetak'])->name('kelas.cetak');
+        Route::resource('/kelas', KriteriaController::class);
 
         Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
         Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');
 
-        Route::get('/hitung/waspas', [HitungController::class, 'waspas'])->name('hitung.waspas');
-        Route::get('/hitung/waspas/cetak', [HitungController::class, 'waspas_cetak'])->name('hitung.waspas.cetak');
-
         Route::get('/hitung/hasil', [HitungController::class, 'hasil'])->name('hitung.hasil');
         Route::get('/hitung/hasil/cetak', [HitungController::class, 'hasil_cetak'])->name('hitung.hasil.cetak');
-
-        Route::get('/rel_kriteria', [Rel_KriteriaController::class, 'index'])->name('rel_kriteria.index');
-        Route::post('/rel_kriteria', [Rel_KriteriaController::class, 'simpan'])->name('rel_kriteria.simpan');
 
         Route::get('/user/profil', [UserController::class, 'profil'])->name('user.profil');
         Route::post('/user/profil', [UserController::class, 'profilUpdate'])->name('user.profil.update');
