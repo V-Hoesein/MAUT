@@ -36,7 +36,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(2, '2022_04_08_062150_create_tb_kriteria_table', 1),
 	(3, '2022_04_08_062659_create_tb_user_table', 1),
 	(4, '2024_11_03_073944_create_tb_kelas_table', 1),
-	(5, '2024_11_03_074444_create_tb_gaya_table', 1),
+	(5, '2024_11_03_074444_create_tb_model_table', 1),
 	(6, '2024_11_03_075119_create_tb_alternatif_table', 1),
 	(7, '2024_11_03_075544_create_tb_mapel_table', 1);
 
@@ -181,20 +181,20 @@ INSERT INTO `tb_alternatif` (`kode_alternatif`, `nama_alternatif`, `kelas`, `cre
 	('a98', 'putri balqis', '2b', NULL, NULL),
 	('a99', 'reza aulia', '2b', NULL, NULL);
 
--- Dumping structure for table maut.tb_gaya
-DROP TABLE IF EXISTS `tb_gaya`;
-CREATE TABLE IF NOT EXISTS `tb_gaya` (
+-- Dumping structure for table maut.tb_model
+DROP TABLE IF EXISTS `tb_model`;
+CREATE TABLE IF NOT EXISTS `tb_model` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tb_gaya_name_unique` (`name`)
+  UNIQUE KEY `tb_model_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table maut.tb_gaya: ~5 rows (approximately)
-DELETE FROM `tb_gaya`;
-INSERT INTO `tb_gaya` (`id`, `name`, `created_at`, `updated_at`) VALUES
+-- Dumping data for table maut.tb_model: ~5 rows (approximately)
+DELETE FROM `tb_model`;
+INSERT INTO `tb_model` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'problem based learning', '2024-11-03 09:19:07', NULL),
 	(2, 'inquiry based learning', '2024-11-03 09:19:37', NULL),
 	(3, 'project based learning', '2024-11-03 09:20:27', NULL),
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `tb_mapel` (
   KEY `tb_mapel_kriteria_kode_foreign` (`kriteria_kode`),
   KEY `tb_mapel_gaya_belajar_foreign` (`gaya_belajar`),
   CONSTRAINT `tb_mapel_alternatif_kode_foreign` FOREIGN KEY (`alternatif_kode`) REFERENCES `tb_alternatif` (`kode_alternatif`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tb_mapel_gaya_belajar_foreign` FOREIGN KEY (`gaya_belajar`) REFERENCES `tb_gaya` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tb_mapel_gaya_belajar_foreign` FOREIGN KEY (`gaya_belajar`) REFERENCES `tb_model` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_mapel_kriteria_kode_foreign` FOREIGN KEY (`kriteria_kode`) REFERENCES `tb_kriteria` (`kode_kriteria`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2701 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

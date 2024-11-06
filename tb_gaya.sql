@@ -14,8 +14,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping data for table maut.tb_gaya: ~5 rows (approximately)
-INSERT INTO `tb_gaya` (`id`, `name`, `created_at`, `updated_at`) VALUES
+-- Dumping data for table maut.tb_model: ~5 rows (approximately)
+INSERT INTO `tb_model` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'Problem Based Learning', '2024-11-03 09:19:07', NULL),
 	(2, 'Inquiry Based Learning', '2024-11-03 09:19:37', NULL),
 	(3, 'Project Based Learning', '2024-11-03 09:20:27', NULL),

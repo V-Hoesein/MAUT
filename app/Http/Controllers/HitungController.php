@@ -24,7 +24,7 @@ class HitungController extends Controller
         $waspas = new WASPAS($rel_alternatif, $bobot, $atribut);
         $categories = [];
         $series[0] = [
-            'name' => 'Total',
+            'nama' => 'Total',
             'data' => [],
         ];
         foreach ($waspas->total as $key => $val) {
@@ -58,7 +58,7 @@ class HitungController extends Controller
         $maut = new MAUT($rel_alternatif, $atribut, $bobot);
         $categories = [];
         $series[0] = [
-            'name' => 'Total',
+            'nama' => 'Total',
             'data' => [],
         ];
         foreach ($maut->total as $key => $val) {

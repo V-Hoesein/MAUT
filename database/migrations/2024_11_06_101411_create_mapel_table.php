@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_gaya', function (Blueprint $table) {
+        Schema::create('mapel', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->index();
+            $table->string('nama')->unique()->index();
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_gaya');
+        Schema::dropIfExists('mapel');
     }
 };

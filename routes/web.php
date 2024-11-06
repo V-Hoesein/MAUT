@@ -1,12 +1,10 @@
 <?php
 
 use App\Http\Controllers\AlternatifController;
-use App\Http\Controllers\SubkriteriaController;
 use App\Http\Controllers\HitungController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
-use App\Http\Controllers\Rel_AlternatifController;
-use App\Http\Controllers\Rel_KriteriaController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,8 +28,8 @@ Route::middleware(['auth', 'level'])->group(
         Route::get('/kriteria/cetak', [KriteriaController::class, 'cetak'])->name('kriteria.cetak');
         Route::resource('/kriteria', KriteriaController::class);
         
-        Route::get('/kelas/cetak', [KriteriaController::class, 'cetak'])->name('kelas.cetak');
-        Route::resource('/kelas', KriteriaController::class);
+        Route::get('/kelas/cetak', [KelasController::class, 'cetak'])->name('kelas.cetak');
+        Route::resource('/kelas', KelasController::class);
 
         Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
         Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');

@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_kelas', function (Blueprint $table) {
+        Schema::create('topik', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_kelas')->index();
+            $table->string('nama')->unique()->index();
+            $table->string('nama_mapel');
+            $table->foreign('nama_mapel')->references('nama')->on('mapel')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
 
-    /**w
+    /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_kelas');
+        Schema::dropIfExists('topik');
     }
 };
