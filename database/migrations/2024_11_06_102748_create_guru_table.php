@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('guru', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nip')->unique()->index();
             $table->string('topik');
             $table->foreign('topik')->references('nama')->on('topik')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kelas');

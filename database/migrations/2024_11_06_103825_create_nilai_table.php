@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('nilai', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_siswa');
-            $table->foreign('nama_siswa')->references('nis')->on('siswa')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('nis');
+            $table->foreign('nis')->references('nis')->on('siswa')->onDelete('cascade')->onUpdate('cascade');
             $table->string('mapel');
             $table->foreign('mapel')->references('nama')->on('mapel')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('nip_guru');
+            $table->foreign('nip_guru')->references('nip')->on('guru')->onDelete('cascade')->onUpdate('cascade');
             $table->string('topik');
             $table->foreign('topik')->references('nama')->on('topik')->onDelete('cascade')->onUpdate('cascade');
-            $table->enum('model', ['pbl', 'ctl', 'pjbl', 'dl', 'ibl']); // Change to enum to match learning_model
-            $table->foreign('model')->references('learning_model')->on('model')->onDelete('cascade')->onUpdate('cascade');
-            $table->double('nilai');
+            $table->enum('model_belajar', ['pbl', 'ctl', 'pjbl', 'dl', 'ibl']);
+            $table->string('variabel');
+            $table->foreign('variabel')->references('nama')->on('variabel')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
