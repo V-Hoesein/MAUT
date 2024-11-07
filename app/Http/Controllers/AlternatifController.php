@@ -167,9 +167,6 @@ class AlternatifController extends Controller
             return redirect('siswa')->with('error', 'Data siswa tnisak ditemukan!');
         }
 
-        // Menghapus data terkait dari tabel relasi (misalnya tabel lain yang terkait dengan siswa)
-        DB::table('siswa')->where('nis', $siswa->nis)->delete();
-
         // Menghapus data dari tabel siswa
         DB::table('siswa')->where('nis', $nis)->delete();
 
