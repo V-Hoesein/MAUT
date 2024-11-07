@@ -99,20 +99,20 @@ class AlternatifController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-{
-    // Mengambil data siswa berdasarkan ID
-    $data['row'] = DB::table('siswa')->where('id', $id)->first(); // Pastikan mengambil data berdasarkan ID
-    $data['kelas'] = DB::table('kelas')->get(); // Mengambil data kelas untuk dropdown
-    $data['title'] = 'Ubah Alternatif';
+    {
+        // Mengambil data siswa berdasarkan ID
+        $data['row'] = DB::table('siswa')->where('id', $id)->first(); // Pastikan mengambil data berdasarkan ID
+        $data['kelas'] = DB::table('kelas')->get(); // Mengambil data kelas untuk dropdown
+        $data['title'] = 'Ubah Alternatif';
 
-    // Pastikan data ditemukan, jika tidak redirect dengan pesan error
-    if (!$data['row']) {
-        return redirect('alternatif')->with('error', 'Data siswa tidak ditemukan!');
+        // Pastikan data ditemukan, jika tidak redirect dengan pesan error
+        if (!$data['row']) {
+            return redirect('alternatif')->with('error', 'Data siswa tidak ditemukan!');
+        }
+
+        // Mengirim data ke view
+        return view('alternatif.edit', $data);
     }
-
-    // Mengirim data ke view
-    return view('alternatif.edit', $data);
-}
 
 
     /**
@@ -123,31 +123,31 @@ class AlternatifController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    // Validasi input
-    $request->validate([
-        'nis' => 'required|unique:siswa,nis,' . $id, // Pastikan NIS tetap unik, kecuali untuk data yang sedang diupdate
-        'nama' => 'required', // Nama wajib diisi
-        'kelas' => 'required', // Kelas wajib diisi
-    ], [
-        'nis.required' => 'NIS harus diisi',
-        'nis.unique' => 'NIS harus unik',
-        'nama.required' => 'Nama siswa harus diisi',
-        'kelas.required' => 'Kelas harus diisi',
-    ]);
-
-    // Update data siswa dengan ID yang diberikan
-    DB::table('siswa')
-        ->where('id', $id) // Menentukan data yang akan diupdate berdasarkan ID
-        ->update([
-            'nis' => $request->nis, // Update NIS
-            'nama' => $request->nama, // Update Nama
-            'kelas' => $request->kelas, // Update Kelas
+    {
+        // Validasi input
+        $request->validate([
+            'nis' => 'required|unique:siswa,nis,' . $id, // Pastikan NIS tetap unik, kecuali untuk data yang sedang diupdate
+            'nama' => 'required', // Nama wajib diisi
+            'kelas' => 'required', // Kelas wajib diisi
+        ], [
+            'nis.required' => 'NIS harus diisi',
+            'nis.unique' => 'NIS harus unik',
+            'nama.required' => 'Nama siswa harus diisi',
+            'kelas.required' => 'Kelas harus diisi',
         ]);
 
-    // Redirect kembali ke halaman alternatif dengan pesan sukses
-    return redirect('alternatif')->with('message', 'Data berhasil diperbarui!');
-}
+        // Update data siswa dengan ID yang diberikan
+        DB::table('siswa')
+            ->where('id', $id) // Menentukan data yang akan diupdate berdasarkan ID
+            ->update([
+                'nis' => $request->nis, // Update NIS
+                'nama' => $request->nama, // Update Nama
+                'kelas' => $request->kelas, // Update Kelas
+            ]);
+
+        // Redirect kembali ke halaman alternatif dengan pesan sukses
+        return redirect('alternatif')->with('message', 'Data berhasil diperbarui!');
+    }
 
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kriteria;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
@@ -10,7 +10,7 @@ class KriteriaController extends Controller
     public function cetak()
     {
         $data['title'] = 'Laporan Data Kriteria';
-        $data['rows'] = Kriteria::orderBy('kode_kriteria')->get();
+        $data['rows'] = DB::table('variabel')->get();
         return view('kriteria.cetak', $data);
     }
     /**
@@ -18,16 +18,22 @@ class KriteriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
-        $data['q'] = $request->input('q');
+        $data['q'] = $request->input('q', '');
         $data['title'] = 'Data Kriteria';
         $data['limit'] = 10;
-        $data['rows'] = Kriteria::where('nama_kriteria', 'like', '%' . $data['q'] . '%')
-            ->orderBy('kode_kriteria')
-            ->paginate($data['limit'])->withQueryString();
-        return view('kriteria.index', $data);
+
+        $data['rows'] = DB::table("variabel")
+            ->where('nama', 'like', '%' . $data['q'] . '%')
+            ->orderBy('nama')
+            ->paginate($data['limit'])
+            ->withQueryString();
+
+        return view("kriteria.index", $data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -49,18 +55,20 @@ class KriteriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_kriteria' => 'required|unique:tb_kriteria',
-            'nama_kriteria' => 'required',
+            'nama' => 'required|unique:variabel',
             'bobot' => 'required',
         ], [
-            'kode_kriteria.required' => 'Kode kriteria harus diisi',
-            'kode_kriteria.unique' => 'Kode kriteria harus unik',
-            'nama_kriteria.required' => 'Nama kriteria harus diisi',
+            'nama.required' => 'Nama kriteria harus diisi',
             'bobot.required' => 'Bobot harus diisi',
         ]);
-        $kriteria = new Kriteria($request->all());
-        $kriteria->save();
-        return redirect()->route('kriteria.index')->with('success', 'Data kriteria berhasil dissimpan');
+
+        DB::table('variabel')->insert([
+            'nama' => $request->nama,
+            'bobot' => $request->bobot,
+        ]);
+
+        return redirect('kriteria')->with('message', 'Data berhasil ditambah!');
+
     }
 
     /**
@@ -80,10 +88,15 @@ class KriteriaController extends Controller
      * @param  \App\Models\Kriteria  $kriteria
      * @return \Illuminate\Http\Response
      */
-    public function edit(string $kriteria)
+    public function edit($id)
     {
-        $data['row'] = Kriteria::findOrFail($kriteria);
-        $data['title'] = 'Ubah Kriteria';
+        $data['row'] = DB::table('variabel')->where('id', $id)->first();
+        $data['title'] = 'Ubah kriteria';
+
+        if (!$data['row']) {
+            return redirect('kriteria')->with('error', 'Data siswa tidak ditemukan!');
+        }
+
         return view('kriteria.edit', $data);
     }
 
@@ -94,20 +107,24 @@ class KriteriaController extends Controller
      * @param  \App\Models\Kriteria  $kriteria
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $kriteria)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_kriteria' => 'required',
+            'nama' => 'required',
             'bobot' => 'required',
         ], [
-            'nama_kriteria.required' => 'Nama kriteria harus diisi',
-            'bobot.required' => 'Bobot harus diisi',
+            'nama.required' => 'Nama harus diisi',
+            'bobot.required' => 'Kelas harus diisi',
         ]);
-        $kriteria = Kriteria::findOrFail($kriteria);
-        $kriteria->nama_kriteria = $request->nama_kriteria;
-        $kriteria->bobot = $request->bobot;
-        $kriteria->save();
-        return redirect('kriteria')->with('message', 'Data berhasil diubah!');
+
+        DB::table('variabel')
+            ->where('id', $id)
+            ->update([
+                'bobot' => $request->bobot,
+                'nama' => $request->nama,
+            ]);
+
+        return redirect('kriteria')->with('message', 'Data berhasil diperbarui!');
     }
 
     /**
@@ -116,10 +133,23 @@ class KriteriaController extends Controller
      * @param  \App\Models\Kriteria  $kriteria
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $kriteria)
+    public function destroy($id)
     {
-        $kriteria = Kriteria::findOrFail($kriteria);
-        $kriteria->delete();
-        return redirect('kriteria')->with('message','Deleted!');
+        // Mengambil data kriteria berdasarkan id
+        $variabel = DB::table('variabel')->where('id', $id)->first();
+
+        // Pastikan data variabel ditemukan
+        if (!$variabel) {
+            return redirect('variabel')->with('error', 'Data variabel tidak ditemukan!');
+        }
+
+        // Menghapus data terkait dari tabel relasi (misalnya tabel lain yang terkait dengan variabel)
+        DB::table('variabel')->where('id', $variabel->id)->delete();
+
+        // Menghapus data dari tabel variabel
+        DB::table('variabel')->where('id', $id)->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect('kriteria')->with('message', 'Data variabel berhasil dihapus!');
     }
 }

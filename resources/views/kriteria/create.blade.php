@@ -9,12 +9,8 @@
 					{{ show_error($errors) }}
 					{{ csrf_field() }}
 					<div class="mb-3">
-						<label>Kode <span class="text-danger">*</span></label>
-						<input class="form-control" type="text" name="kode_kriteria" value="{{ old('kode_kriteria', kode_oto('kode_kriteria', 'tb_kriteria', 'C', 2)) }}" />
-					</div>
-					<div class="mb-3">
 						<label>Nama kriteria <span class="text-danger">*</span></label>
-						<input class="form-control" type="text" name="nama_kriteria" value="{{ old('nama_kriteria') }}" />
+						<input class="form-control" type="text" name="nama" value="{{ old('nama') }}" />
 					</div>
 					<div class="mb-3">
 						<label>Bobot <span class="text-danger">*</span></label>

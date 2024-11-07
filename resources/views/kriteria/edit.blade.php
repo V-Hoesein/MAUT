@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', $title)
 @section('content')
-<form action="{{ route('kriteria.update', $row) }}" method="post">
+<form action="{{ route('kriteria.update', $row->id) }}" method="post">
 	<div class="card">
 		<div class="card-body">
 			<div class="row">
@@ -10,12 +10,8 @@
 					{{ csrf_field() }}
 					{{ method_field('PUT') }}
 					<div class="mb-3">
-						<label>Kode kriteria <span class="text-danger">*</span></label>
-						<input class="form-control" type="text" name="kode_kriteria" value="{{ old('kode_kriteria', $row->kode_kriteria) }}" readonly>
-					</div>
-					<div class="mb-3">
 						<label>Nama kriteria <span class="text-danger">*</span></label>
-						<input class="form-control" type="text" name="nama_kriteria" value="{{ old('nama_kriteria', $row->nama_kriteria) }}">
+						<input class="form-control" type="text" name="nama" value="{{ old('nama', $row->nama) }}">
 					</div>
 					<div class="mb-3">
 						<label>Bobot <span class="text-danger">*</span></label>

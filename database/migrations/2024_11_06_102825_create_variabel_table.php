@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('variabel', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->unique()->index();
+            $table->double('bobot');
             $table->timestamps();
         });
     }
