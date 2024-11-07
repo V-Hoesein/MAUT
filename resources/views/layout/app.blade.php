@@ -76,6 +76,12 @@
                     <span>Mapel</span></a>
             </li>
 
+            <li class="nav-item" {{ is_hidden('guru.index') }}>
+                <a class="nav-link" href="{{ route('guru.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Guru</span></a>
+            </li>
+
             <li class="nav-item" {{ is_hidden('hitung.hasil') }}>
                 <a class="nav-link" href="{{ route('hitung.hasil') }}">
                     <i class="fas fa-fw fa-calendar"></i>

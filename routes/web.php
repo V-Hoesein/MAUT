@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlternatifController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\HitungController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
@@ -34,6 +35,9 @@ Route::middleware(['auth', 'level'])->group(
 
         Route::get('/mapel/cetak', [MapelController::class, 'cetak'])->name('mapel.cetak');
         Route::resource('/mapel', MapelController::class);
+
+        Route::get('/guru/cetak', [GuruController::class, 'cetak'])->name('guru.cetak');
+        Route::resource('/guru', GuruController::class);
 
         Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
         Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');
