@@ -2,33 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Alternatif;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class AlternatifController extends Controller
 {
     public function cetak()
     {
-        $data['title'] = 'Laporan Data Alternatif';
-        $data['rows'] = Alternatif::orderBy('kode_alternatif')->get();
-        return view('alternatif.cetak', $data);
+        // $data['title'] = 'Laporan Data Alternatif';
+        // $data['rows'] = Alternatif::orderBy('kode_alternatif')->get();
+        // return view('alternatif.cetak', $data);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
         $data['q'] = $request->input('q');
         $data['title'] = 'Data Alternatif';
         $data['limit'] = 10;
-        $data['rows'] = Alternatif::where('nama_alternatif', 'like', '%' . $data['q'] . '%')
-            ->orderBy('kode_alternatif')
-            ->paginate($data['limit'])->withQueryString();
-        return view('alternatif.index', $data);
+
+        $data['rows'] = DB::table("siswa")
+            ->where('nama', 'like', '%' . $data['q'] . '%')
+            ->orderBy('nis')
+            ->paginate($data['limit'])
+            ->withQueryString();
+
+        return view("alternatif.index", $data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,6 +44,7 @@ class AlternatifController extends Controller
     public function create()
     {
         $data['title'] = 'Tambah Alternatif';
+        $data['kelas'] = DB::table('kelas')->get();
         return view('alternatif.create', $data);
     }
 
@@ -49,20 +56,30 @@ class AlternatifController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'kode_alternatif' => 'required|unique:tb_alternatif',
-            'nama_alternatif' => 'required',
+            'nis' => 'required|unique:siswa',
+            'nama' => 'required',
+            'kelas' => 'required',
         ], [
-            'kode_alternatif.required' => 'Kode alternatif harus diisi',
-            'kode_alternatif.unique' => 'Kode alternatif harus unik',
-            'nama_alternatif.required' => 'Nama alternatif harus diisi',
+            'nis.required' => 'NIS harus diisi',
+            'nis.unique' => 'NIS harus unik',
+            'nama.required' => 'Nama siswa harus diisi',
+            'kelas.required' => 'Kelas harus diisi',
         ]);
-        $alternatif = new Alternatif($request->all());
-        $alternatif->save();
 
+        // Menyimpan data ke tabel siswa menggunakan facade DB
+        DB::table('siswa')->insert([
+            'nis' => $request->nis,
+            'nama' => $request->nama,
+            'kelas' => $request->kelas,
+        ]);
 
+        // Redirect kembali ke halaman alternatif dengan pesan sukses
         return redirect('alternatif')->with('message', 'Data berhasil ditambah!');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -70,7 +87,7 @@ class AlternatifController extends Controller
      * @param  \App\Models\Alternatif  $alternatif
      * @return \Illuminate\Http\Response
      */
-    public function show(Alternatif $alternatif)
+    public function show(Request $alternatif)
     {
         //
     }
@@ -81,12 +98,22 @@ class AlternatifController extends Controller
      * @param  \App\Models\Alternatif  $alternatif
      * @return \Illuminate\Http\Response
      */
-    public function edit(Alternatif $alternatif)
-    {
-        $data['row'] = $alternatif;
-        $data['title'] = 'Ubah Alternatif';
-        return view('alternatif.edit', $data);
+    public function edit($id)
+{
+    // Mengambil data siswa berdasarkan ID
+    $data['row'] = DB::table('siswa')->where('id', $id)->first(); // Pastikan mengambil data berdasarkan ID
+    $data['kelas'] = DB::table('kelas')->get(); // Mengambil data kelas untuk dropdown
+    $data['title'] = 'Ubah Alternatif';
+
+    // Pastikan data ditemukan, jika tidak redirect dengan pesan error
+    if (!$data['row']) {
+        return redirect('alternatif')->with('error', 'Data siswa tidak ditemukan!');
     }
+
+    // Mengirim data ke view
+    return view('alternatif.edit', $data);
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -95,18 +122,33 @@ class AlternatifController extends Controller
      * @param  \App\Models\Alternatif  $alternatif
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Alternatif $alternatif)
-    {
-        $request->validate([
-            'nama_alternatif' => 'required',
-        ], [
-            'nama_alternatif.required' => 'Nama alternatif harus diisi',
+    public function update(Request $request, $id)
+{
+    // Validasi input
+    $request->validate([
+        'nis' => 'required|unique:siswa,nis,' . $id, // Pastikan NIS tetap unik, kecuali untuk data yang sedang diupdate
+        'nama' => 'required', // Nama wajib diisi
+        'kelas' => 'required', // Kelas wajib diisi
+    ], [
+        'nis.required' => 'NIS harus diisi',
+        'nis.unique' => 'NIS harus unik',
+        'nama.required' => 'Nama siswa harus diisi',
+        'kelas.required' => 'Kelas harus diisi',
+    ]);
+
+    // Update data siswa dengan ID yang diberikan
+    DB::table('siswa')
+        ->where('id', $id) // Menentukan data yang akan diupdate berdasarkan ID
+        ->update([
+            'nis' => $request->nis, // Update NIS
+            'nama' => $request->nama, // Update Nama
+            'kelas' => $request->kelas, // Update Kelas
         ]);
-        $alternatif->nama_alternatif = $request->nama_alternatif;
-        $alternatif->keterangan = $request->keterangan;
-        $alternatif->save();
-        return redirect('alternatif')->with('message', 'Data berhasil diubah!');
-    }
+
+    // Redirect kembali ke halaman alternatif dengan pesan sukses
+    return redirect('alternatif')->with('message', 'Data berhasil diperbarui!');
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -114,10 +156,25 @@ class AlternatifController extends Controller
      * @param  \App\Models\Alternatif  $alternatif
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Alternatif $alternatif)
+
+    public function destroy($nis)
     {
-        query("DELETE FROM tb_rel_alternatif WHERE kode_alternatif=?", [$alternatif->kode_alternatif]);
-        $alternatif->delete();
-        return redirect('alternatif')->with('message', 'Data berhasil dihapus!');
+        // Mengambil data siswa berdasarkan nis
+        $siswa = DB::table('siswa')->where('nis', $nis)->first();
+
+        // Pastikan data siswa ditemukan
+        if (!$siswa) {
+            return redirect('siswa')->with('error', 'Data siswa tnisak ditemukan!');
+        }
+
+        // Menghapus data terkait dari tabel relasi (misalnya tabel lain yang terkait dengan siswa)
+        DB::table('siswa')->where('nis', $siswa->nis)->delete();
+
+        // Menghapus data dari tabel siswa
+        DB::table('siswa')->where('nis', $nis)->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect('alternatif')->with('message', 'Data siswa berhasil dihapus!');
     }
+
 }

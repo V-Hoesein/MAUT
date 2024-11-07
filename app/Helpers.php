@@ -40,16 +40,6 @@ function is_hidden($action)
     return is_able($action) ? '' : 'hidden';
 }
 
-function is_admin()
-{
-    return Auth::user()->level == 'admin';
-}
-
-function is_user()
-{
-    return Auth::user()->level == 'user';
-}
-
 function get_kriteria_option($selected = '')
 {
     $arr = get_kriteria();
@@ -65,7 +55,7 @@ function get_kriteria_option($selected = '')
 
 function get_kriteria()
 {
-    $rows = get_results("SELECT * FROM tb_kriteria ORDER BY kode_kriteria");
+    $rows = get_results("SELECT * FROM kriteria ORDER BY kode_kriteria");
     $arr = array();
     foreach ($rows as $row) {
         $arr[$row->kode_kriteria] = $row;
@@ -75,7 +65,7 @@ function get_kriteria()
 
 function get_alternatif()
 {
-    $rows = get_results("SELECT * FROM tb_alternatif ORDER BY kode_alternatif");
+    $rows = get_results("SELECT * FROM alternatif ORDER BY kode_alternatif");
     $arr = array();
     foreach ($rows as $row) {
         $arr[$row->kode_alternatif] = $row;
@@ -83,29 +73,10 @@ function get_alternatif()
     return $arr;
 }
 
-function get_rel_alternatif()
-{
-    $rows = get_results("SELECT * FROM tb_rel_alternatif ORDER BY kode_alternatif, kode_kriteria");
-    $arr = array();
-    foreach ($rows as $row) {
-        $arr[$row->kode_alternatif][$row->kode_kriteria] = $row->id_subkriteria;
-    }
-    return $arr;
-}
-
-function get_rel_kelas()
-{
-    $rows = get_results("SELECT * FROM tb_rel_alternatif r LEFT JOIN tb_subkriteria s ON s.id_subkriteria=r.id_subkriteria ORDER BY kode_alternatif, r.kode_kriteria");
-    $arr = array();
-    foreach ($rows as $row) {
-        $arr[$row->kode_alternatif][$row->kode_kriteria] = $row->bobot_subkriteria;
-    }
-    return $arr;
-}
 
 function get_subkriteria()
 {
-    $rows = get_results("SELECT * FROM tb_subkriteria ORDER BY kode_kriteria, bobot_subkriteria");
+    $rows = get_results("SELECT * FROM subkriteria ORDER BY kode_kriteria, bobot_subkriteria");
     $arr = array();
     foreach ($rows as $row) {
         $arr[$row->id_subkriteria] = $row;
@@ -122,45 +93,9 @@ function get_kriteria_subkriteria()
     return $arr;
 }
 
-function get_subkriteria_option($kode_kriteria, $selected = '')
-{
-    $arr = get_subkriteria();
-    $a = '';
-    foreach ($arr as $key => $val) {
-        if ($val->kode_kriteria == $kode_kriteria) {
-            if ($key == $selected)
-                $a .= '<option value="' . $key . '" selected>' . $val->nama_subkriteria . '</option>';
-            else
-                $a .= '<option value="' . $key . '">' . $val->nama_subkriteria . '</option>';
-        }
-    }
-    return $a;
-}
-
-function format_date($data, $format = 'd-M-Y')
-{
-    return date($format, strtotime($data));
-}
-
 function current_user()
 {
     return User::find(Auth::id());
-}
-
-function get_atribut_option($selected = '')
-{
-    $arr = [
-        'benefit' => 'Benefit',
-        'cost' => 'Cost'
-    ];
-    $a = '';
-    foreach ($arr as $key => $value) {
-        if ($selected == $key)
-            $a .= "<option value='$key' selected>$value</option>";
-        else
-            $a .= "<option value='$key'>$value</option>";
-    }
-    return $a;
 }
 
 function get_level_option($selected = '')
@@ -195,13 +130,6 @@ function get_status_user_option($selected = '')
     return $a;
 }
 
-function print_msg($msg, $type = 'danger')
-{
-    echo ('<div class="alert alert-' . $type . ' alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>' . $msg . '</div>');
-}
 
 function show_error($errors)
 {
@@ -226,11 +154,6 @@ function show_msg()
   </button>
         </div>';
     }
-}
-
-function rp($number)
-{
-    return 'Rp ' . number_format($number);
 }
 
 function kode_oto($field, $table, $prefix, $length)

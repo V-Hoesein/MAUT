@@ -9,7 +9,7 @@ class Alternatif extends Model
 {
     use HasFactory;
 
-    protected $table = 'tb_alternatif';
+    protected $table = 'alternatif';
     protected $primaryKey = 'kode_alternatif';
     public $incrementing = false;
 
