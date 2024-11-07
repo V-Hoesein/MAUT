@@ -14,6 +14,7 @@ function is_able($action)
             'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
             'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
             'kelas.index', 'kelas.create', 'kelas.store', 'kelas.edit', 'kelas.update', 'kelas.destroy', 'kelas.cetak',
+            'mapel.index', 'mapel.create', 'mapel.store', 'mapel.edit', 'mapel.update', 'mapel.destroy', 'mapel.cetak',
             'hitung.index', 'hitung.maut', 'hitung.maut.cetak', 'hitung.waspas', 'hitung.waspas.cetak', 'hitung.hasil', 'hitung.hasil.cetak',
         ],
         'user' => [
