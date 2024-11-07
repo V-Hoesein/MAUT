@@ -9,9 +9,9 @@ class AlternatifController extends Controller
 {
     public function cetak()
     {
-        // $data['title'] = 'Laporan Data Alternatif';
-        // $data['rows'] = Alternatif::orderBy('kode_alternatif')->get();
-        // return view('alternatif.cetak', $data);
+        $data['title'] = 'Laporan Data Alternatif';
+        $data['rows'] = DB::table('siswa')->get();
+        return view('alternatif.cetak', $data);
     }
 
     /**
