@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('nip')->unique()->index();
-            $table->string('topik');
-            $table->foreign('topik')->references('nama')->on('topik')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kelas');
             $table->foreign('kelas')->references('nama')->on('kelas')->onDelete('cascade')->onUpdate('cascade');
             $table->string('mapel');
