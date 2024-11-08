@@ -9,7 +9,6 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\TopikController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\VariabelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,9 +39,6 @@ Route::middleware(['auth', 'level'])->group(
 
         Route::get('/guru/cetak', [GuruController::class, 'cetak'])->name('guru.cetak');
         Route::resource('/guru', GuruController::class);
-
-        Route::get('/variabel/cetak', [VariabelController::class, 'cetak'])->name('variabel.cetak');
-        Route::resource('/variabel', VariabelController::class);
 
         Route::get('/topik/cetak', [TopikController::class, 'cetak'])->name('topik.cetak');
         Route::resource('/topik', TopikController::class);
