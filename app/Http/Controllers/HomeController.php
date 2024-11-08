@@ -4,18 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Alternatif;
 use App\Models\Kriteria;
-use App\Models\Subkriteria;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function show()
     {
         if (Auth::check()) {
-            $title =  'Dashboard';
-            $kriteria_count = Kriteria::count();
-            $alternatif_count = Alternatif::count();
-            return view('dashboard', compact('title', 'kriteria_count',  'alternatif_count'));
+            $title = 'Dashboard';
+            $kelas = DB::table('kelas')->count();
+            $guru = DB::table('guru')->count();
+            $alternatif = DB::table('siswa')->count();
+            $mapel = DB::table('mapel')->count();
+            return view('dashboard', compact(
+                'title',
+                'kelas',
+                'guru',
+                'alternatif',
+                'mapel'
+            ));
         } else {
             $title = 'Selamat Datang';
             return view('home', compact('title'));
