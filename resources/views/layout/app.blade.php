@@ -91,6 +91,12 @@
                     <span>Alternatif</span></a>
             </li>
 
+            <li class="nav-item" {{ is_hidden('nilai.index') }}>
+                <a class="nav-link" href="{{ route('nilai.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Nilai</span></a>
+            </li>
+
             <li class="nav-item" {{ is_hidden('hitung.hasil') }}>
                 <a class="nav-link" href="{{ route('hitung.hasil') }}">
                     <i class="fas fa-fw fa-calendar"></i>

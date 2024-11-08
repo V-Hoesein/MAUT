@@ -17,6 +17,7 @@ function is_able($action)
             'guru.index', 'guru.create', 'guru.store', 'guru.edit', 'guru.update', 'guru.destroy', 'guru.cetak',
             'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
             'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
+            'nilai.index', 'nilai.create', 'nilai.store', 'nilai.edit', 'nilai.update', 'nilai.destroy', 'nilai.cetak',
             'hitung.index', 'hitung.maut', 'hitung.maut.cetak', 'hitung.waspas', 'hitung.waspas.cetak', 'hitung.hasil', 'hitung.hasil.cetak',
         ],
         'user' => [

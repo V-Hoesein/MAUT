@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
+use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\TopikController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,9 @@ Route::middleware(['auth', 'level'])->group(
 
         Route::get('/topik/cetak', [TopikController::class, 'cetak'])->name('topik.cetak');
         Route::resource('/topik', TopikController::class);
+
+        Route::get('/nilai/cetak', [NilaiController::class, 'cetak'])->name('nilai.cetak');
+        Route::resource('/nilai', NilaiController::class);
 
         Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
         Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');
