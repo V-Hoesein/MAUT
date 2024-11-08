@@ -14,6 +14,7 @@ function is_able($action)
             'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
             'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
             'variabel.index', 'variabel.create', 'variabel.store', 'variabel.edit', 'variabel.update', 'variabel.destroy', 'variabel.cetak',
+            'topik.index', 'topik.create', 'topik.store', 'topik.edit', 'topik.update', 'topik.destroy', 'topik.cetak',
             'kelas.index', 'kelas.create', 'kelas.store', 'kelas.edit', 'kelas.update', 'kelas.destroy', 'kelas.cetak',
             'mapel.index', 'mapel.create', 'mapel.store', 'mapel.edit', 'mapel.update', 'mapel.destroy', 'mapel.cetak',
             'guru.index', 'guru.create', 'guru.store', 'guru.edit', 'guru.update', 'guru.destroy', 'guru.cetak',

@@ -70,6 +70,12 @@
                     <span>Variabel</span></a>
             </li>
 
+            <li class="nav-item" {{ is_hidden('topik.index') }}>
+                <a class="nav-link" href="{{ route('topik.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Topik</span></a>
+            </li>
+
             <li class="nav-item" {{ is_hidden('kelas.index') }}>
                 <a class="nav-link" href="{{ route('kelas.index') }}">
                     <i class="fas fa-fw fa-users"></i>
