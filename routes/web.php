@@ -8,6 +8,7 @@ use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VariabelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,9 @@ Route::middleware(['auth', 'level'])->group(
 
         Route::get('/guru/cetak', [GuruController::class, 'cetak'])->name('guru.cetak');
         Route::resource('/guru', GuruController::class);
+
+        Route::get('/variabel/cetak', [VariabelController::class, 'cetak'])->name('variabel.cetak');
+        Route::resource('/variabel', VariabelController::class);
 
         Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
         Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');

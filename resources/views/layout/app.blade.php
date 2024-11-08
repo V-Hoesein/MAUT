@@ -64,6 +64,12 @@
                     <span>Alternatif</span></a>
             </li>
 
+            <li class="nav-item" {{ is_hidden('variabel.index') }}>
+                <a class="nav-link" href="{{ route('variabel.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Variabel</span></a>
+            </li>
+
             <li class="nav-item" {{ is_hidden('kelas.index') }}>
                 <a class="nav-link" href="{{ route('kelas.index') }}">
                     <i class="fas fa-fw fa-users"></i>
