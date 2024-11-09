@@ -3,18 +3,17 @@
 @section('content')
     {{ show_msg() }}
 
+    <!-- Nilai MIN dan MAX Variabel -->
     <h4 class="card-title font-weight-bold text-primary mb-3">Nilai MIN dan MAX Variabel</h4>
     <div class="card card-primary card-outline">
         <div class="card-header d-flex justify-content-between">
-            <div class="form-group">
-                <div class="btn-group" role="group">
-                    <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
-                        <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
-                    </div>
-                    <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
-                        <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
-                            <span class="fa fa-print"></span> Cetak</a>
-                    </div>
+            <div class="btn-group" role="group">
+                <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
+                    <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
+                </div>
+                <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
+                    <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
+                        <span class="fa fa-print"></span> Cetak</a>
                 </div>
             </div>
         </div>
@@ -51,18 +50,17 @@
         </div>
     </div>
 
+    <!-- Nilai Utility -->
     <h4 class="card-title font-weight-bold text-primary mb-3 mt-3">Nilai Utility</h4>
     <div class="card card-primary card-outline">
         <div class="card-header d-flex justify-content-between">
-            <div class="form-group">
-                <div class="btn-group" role="group">
-                    <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
-                        <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
-                    </div>
-                    <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
-                        <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
-                            <span class="fa fa-print"></span> Cetak</a>
-                    </div>
+            <div class="btn-group" role="group">
+                <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
+                    <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
+                </div>
+                <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
+                    <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
+                        <span class="fa fa-print"></span> Cetak</a>
                 </div>
             </div>
         </div>
@@ -105,31 +103,135 @@
         </div>
     </div>
 
+    <!-- Total MAUT -->
+    <h4 class="card-title font-weight-bold text-primary mb-3 mt-3">Total MAUT</h4>
+    <div class="card card-primary card-outline">
+        <div class="card-header d-flex justify-content-between">
+            <div class="btn-group" role="group">
+                <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
+                    <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
+                </div>
+                <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
+                    <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
+                        <span class="fa fa-print"></span> Cetak</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0 table-responsive">
+            <table id="tableTotalMAUT" class="table table-bordered table-hover table-striped m-0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kelas</th>
+                        <th>Mapel</th>
+                        <th>Topik</th>
+                        <th>Model Belajar</th>
+                        <th>Total Weighted Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rows['totalMAUT'] as $key => $row)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $row['kelas'] }}</td>
+                            <td>{{ $row['mapel'] }}</td>
+                            <td>{{ $row['topik'] }}</td>
+                            <td>{{ $row['model_belajar'] }}</td>
+                            <td>{{ round($row['total_weighted_value'], 3) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div id="paginationTotalMAUT" class="pagination-container mt-2"></div>
+        </div>
+    </div>
+
+    <!-- Average MAUT -->
+    <h4 class="card-title font-weight-bold text-primary mb-3 mt-3">Average MAUT</h4>
+    <div class="card card-primary card-outline">
+        <div class="card-header d-flex justify-content-between">
+            <div class="btn-group" role="group">
+                <div class="form-group mr-1" {{ is_hidden('maut.create') }}>
+                    <a class="btn btn-primary" href="{{ route('maut.create') }}"><i class="fa fa-plus"></i> Tambah</a>
+                </div>
+                <div class="form-group mr-1" {{ is_hidden('maut.cetak') }}>
+                    <a class="btn btn-secondary" href="{{ route('maut.cetak') }}" target="_blank">
+                        <span class="fa fa-print"></span> Cetak</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0 table-responsive">
+            @php
+                // Find the highest average_value in the array for conditional highlighting
+                $maxAverageValue = max(array_column($rows['averageMAUT'], 'average_value'));
+            @endphp
+            <table id="tableAverageMAUT" class="table table-bordered table-hover table-striped m-0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Model Belajar</th>
+                        <th>Total Value</th>
+                        <th>Count</th>
+                        <th>Average Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rows['averageMAUT'] as $key => $row)
+                        <tr class="{{ $row['average_value'] == $maxAverageValue ? 'highlight-row' : '' }}">
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $row['model_belajar'] }}</td>
+                            <td>{{ round($row['total_value'], 3) }}</td>
+                            <td>{{ $row['count'] }}</td>
+                            <td>{{ round($row['average_value'], 3) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div id="paginationAverageMAUT" class="pagination-container mt-2"></div>
+        </div>
+    </div>
+
+
     <style>
+        .highlight-row {
+            background-color: #d4edda;
+            /* Light green background */
+            color: #155724;
+            font-weight: 900;
+            /* Dark green text */
+        }
+
+
+        /* Styling for pagination buttons */
         .pagination-container {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
+            margin-top: 20px;
         }
+
         .pagination-container .page-btn {
-            padding: 5px 12px;
-            margin: 2px;
+            padding: 8px 16px;
+            margin: 0 4px;
             border: 1px solid #007bff;
             background-color: #fff;
             color: #007bff;
             cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.2s;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         .pagination-container .page-btn.active {
             background-color: #007bff;
             color: #fff;
         }
+
         .pagination-container .page-btn:hover {
             background-color: #0056b3;
             color: #fff;
         }
+
         .pagination-container .page-dots {
             margin: 0 5px;
             color: #007bff;
@@ -137,6 +239,7 @@
     </style>
 
     <script>
+        // JavaScript to manage table pagination
         function paginateTable(tableId, paginationId, rowsPerPage) {
             const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
             const rows = table.getElementsByTagName('tr');
@@ -154,56 +257,31 @@
             function setupPagination() {
                 pagination.innerHTML = '';
                 const pageCount = Math.ceil(rows.length / rowsPerPage);
-                const maxButtons = 5;
-                let startButton = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-                let endButton = Math.min(pageCount, startButton + maxButtons - 1);
-                startButton = Math.max(1, endButton - maxButtons + 1);
-
-                if (startButton > 1) {
-                    const firstBtn = createPageButton(1);
-                    pagination.appendChild(firstBtn);
-                    if (startButton > 2) pagination.appendChild(createDots());
+                for (let i = 1; i <= pageCount; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.classList.add('page-btn');
+                    pageBtn.textContent = i;
+                    pageBtn.onclick = () => {
+                        currentPage = i;
+                        displayPage(currentPage);
+                        const activeBtn = pagination.querySelector('.active');
+                        if (activeBtn) activeBtn.classList.remove('active');
+                        pageBtn.classList.add('active');
+                    };
+                    if (i === 1) pageBtn.classList.add('active');
+                    pagination.appendChild(pageBtn);
                 }
-
-                for (let i = startButton; i <= endButton; i++) {
-                    pagination.appendChild(createPageButton(i));
-                }
-
-                if (endButton < pageCount) {
-                    if (endButton < pageCount - 1) pagination.appendChild(createDots());
-                    pagination.appendChild(createPageButton(pageCount));
-                }
-            }
-
-            function createPageButton(page) {
-                const btn = document.createElement('button');
-                btn.textContent = page;
-                btn.classList.add('page-btn');
-                if (page === currentPage) btn.classList.add('active');
-                btn.addEventListener('click', () => setCurrentPage(page));
-                return btn;
-            }
-
-            function createDots() {
-                const dots = document.createElement('span');
-                dots.textContent = '...';
-                dots.classList.add('page-dots');
-                return dots;
-            }
-
-            function setCurrentPage(page) {
-                currentPage = page;
-                displayPage(currentPage);
-                setupPagination();
             }
 
             displayPage(currentPage);
             setupPagination();
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            paginateTable('tableMinMax', 'paginationMinMax', 10); // Show 10 rows per page for MinMax table
-            paginateTable('tableUtility', 'paginationUtility', 10); // Show 10 rows per page for Utility table
+        document.addEventListener('DOMContentLoaded', () => {
+            paginateTable('tableMinMax', 'paginationMinMax', 10);
+            paginateTable('tableUtility', 'paginationUtility', 10);
+            paginateTable('tableTotalMAUT', 'paginationTotalMAUT', 10);
+            paginateTable('tableAverageMAUT', 'paginationAverageMAUT', 10);
         });
     </script>
 @endsection
