@@ -121,7 +121,27 @@ class MAUT
             }
         }
 
-        var_dump($nilai);
+        // Menghitung nilai total MAUT untuk setiap kombinasi kelas, mapel, dan topik
+        $totalMAUT = [];
+
+        foreach ($nilai as $entry) {
+            $key = "{$entry['kelas']}_{$entry['mapel']}_{$entry['topik']}";
+
+            if (!isset($totalMAUT[$key])) {
+                $totalMAUT[$key] = [
+                    'kelas' => $entry['kelas'],
+                    'mapel' => $entry['mapel'],
+                    'topik' => $entry['topik'],
+                    'total_weighted_value' => 0
+                ];
+            }
+
+            $totalMAUT[$key]['total_weighted_value'] += $entry['weighted_value'];
+        }
+
+        $totalMAUT = array_values($totalMAUT);
+
+        var_dump($totalMAUT);
 
         die;
 
