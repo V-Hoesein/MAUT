@@ -1,5 +1,4 @@
 <?php
-
 namespace App;
 
 use Illuminate\Support\Facades\DB;
@@ -17,16 +16,11 @@ class MAUT
         $queryBuilder = [];
 
         foreach ($kelas as $kls) {
-
             foreach ($mapel as $mpl) {
                 foreach ($topik as $tpk) {
                     foreach ($model as $mdl) {
                         foreach ($variabel as $vrb) {
-
-                            // Create a unique key based on the values to prevent duplicates
                             $key = "{$kls['nama']}_{$mpl['nama']}_{$tpk['nama']}_{$mdl}_{$vrb['nama']}";
-
-                            // Only add if the key doesn't already exist
                             if (!isset($queryBuilder[$key])) {
                                 $queryBuilder[$key] = [
                                     'kelas' => $kls['nama'],
@@ -43,7 +37,6 @@ class MAUT
         }
 
         $queryBuilder = array_values($queryBuilder);
-        // var_dump($queryBuilder);
 
         $minMax = [];
 
@@ -89,11 +82,49 @@ class MAUT
             }
         }
 
-        var_dump($minMax);
+        $utilities = [];
+
+        $nilai = json_decode(json_encode(
+            DB::table('nilai as n')
+                ->select('s.kelas', 'n.mapel', 'g.nama as nama_guru', 'n.topik', 'n.model_belajar', 'n.variabel', 's.nama as nama_siswa', DB::raw('n.nilai * 0.01 as nilai'))
+                ->join('siswa as s', 'n.nis', '=', 's.nis')
+                ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
+                ->get()
+        ), true);
+
+        foreach ($nilai as &$entry) {
+            foreach ($minMax as $range) {
+                if (
+                    $entry['kelas'] === $range['kelas'] &&
+                    $entry['mapel'] === $range['mapel'] &&
+                    $entry['topik'] === $range['topik'] &&
+                    $entry['model_belajar'] === $range['model'] &&
+                    $entry['variabel'] === $range['variabel']
+                ) {
+                    $nilaiMIN = $range['nilaiMIN'];
+                    $nilaiMAX = $range['nilaiMAX'];
+
+                    if ($nilaiMAX != $nilaiMIN) {
+                        $entry['nilai_normalized'] = ($entry['nilai'] - $nilaiMIN) / ($nilaiMAX - $nilaiMIN);
+                    } else {
+                        $entry['nilai_normalized'] = 0;
+                    }
+                    break;
+                }
+            }
+
+            foreach ($variabel as $vrb) {
+                if ($entry['variabel'] === $vrb['nama']) {
+                    $entry['weighted_value'] = $entry['nilai_normalized'] * $vrb['bobot'];
+                    break;
+                }
+            }
+        }
+
+        var_dump($nilai);
 
         die;
 
         return $queryBuilder;
     }
-
 }
