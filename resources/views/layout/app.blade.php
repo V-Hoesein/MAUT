@@ -100,7 +100,7 @@
             <li class="nav-item" {{ is_hidden('maut.index') }}>
                 <a class="nav-link" href="{{ route('maut.index') }}">
                     <i class="fas fa-fw fa-calendar"></i>
-                    <span>Hasil</span></a>
+                    <span>MAUT</span></a>
             </li>
 
             <li class="nav-item" {{ is_hidden('tentang') }}>

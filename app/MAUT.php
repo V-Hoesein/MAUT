@@ -82,8 +82,6 @@ class MAUT
             }
         }
 
-        $utilities = [];
-
         $nilai = json_decode(json_encode(
             DB::table('nilai as n')
                 ->select('s.kelas', 'n.mapel', 'g.nama as nama_guru', 'n.topik', 'n.model_belajar', 'n.variabel', 's.nama as nama_siswa', DB::raw('n.nilai * 0.01 as nilai'))
@@ -121,17 +119,18 @@ class MAUT
             }
         }
 
-        // Menghitung nilai total MAUT untuk setiap kombinasi kelas, mapel, dan topik
+        // Menghitung nilai total MAUT untuk setiap kombinasi kelas, mapel, topik, dan model_belajar
         $totalMAUT = [];
 
         foreach ($nilai as $entry) {
-            $key = "{$entry['kelas']}_{$entry['mapel']}_{$entry['topik']}";
+            $key = "{$entry['kelas']}_{$entry['mapel']}_{$entry['topik']}_{$entry['model_belajar']}";
 
             if (!isset($totalMAUT[$key])) {
                 $totalMAUT[$key] = [
                     'kelas' => $entry['kelas'],
                     'mapel' => $entry['mapel'],
                     'topik' => $entry['topik'],
+                    'model_belajar' => $entry['model_belajar'],
                     'total_weighted_value' => 0
                 ];
             }
@@ -139,12 +138,37 @@ class MAUT
             $totalMAUT[$key]['total_weighted_value'] += $entry['weighted_value'];
         }
 
-        $totalMAUT = array_values($totalMAUT);
+        // Menghitung rata-rata nilai MAUT per model_belajar
+        $averageMAUT = [];
 
-        var_dump($totalMAUT);
+        foreach ($totalMAUT as $entry) {
+            $model = $entry['model_belajar'];
 
-        die;
+            if (!isset($averageMAUT[$model])) {
+                $averageMAUT[$model] = [
+                    'model_belajar' => $model,
+                    'total_value' => 0,
+                    'count' => 0
+                ];
+            }
 
-        return $queryBuilder;
+            $averageMAUT[$model]['total_value'] += $entry['total_weighted_value'];
+            $averageMAUT[$model]['count'] += 1;
+        }
+
+        foreach ($averageMAUT as &$entry) {
+            $entry['average_value'] = $entry['total_value'] / $entry['count'];
+        }
+
+        // Mengurutkan model belajar berdasarkan nilai rata-rata tertinggi
+        usort($averageMAUT, fn($a, $b) => $b['average_value'] <=> $a['average_value']);
+
+
+        return [
+            'minMax' => $minMax,
+            'nilai' => $nilai,
+            'totalMAUT' => $totalMAUT,
+            'averageMAUT' => $averageMAUT,
+        ];
     }
 }
