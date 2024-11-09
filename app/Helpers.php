@@ -9,24 +9,88 @@ function is_able($action)
     $role = [
         'admin' => [
             'home.dashboard',
-            'user.index', 'user.create', 'user.store', 'user.edit', 'user.update', 'user.destroy', 'user.cetak',
-            'user.password', 'user.password.update', 'user.logout', 'user.profil', 'user.profil.update',
-            'kelas.index', 'kelas.create', 'kelas.store', 'kelas.edit', 'kelas.update', 'kelas.destroy', 'kelas.cetak',
-            'mapel.index', 'mapel.create', 'mapel.store', 'mapel.edit', 'mapel.update', 'mapel.destroy', 'mapel.cetak',
-            'topik.index', 'topik.create', 'topik.store', 'topik.edit', 'topik.update', 'topik.destroy', 'topik.cetak',
-            'guru.index', 'guru.create', 'guru.store', 'guru.edit', 'guru.update', 'guru.destroy', 'guru.cetak',
-            'alternatif.index', 'alternatif.create', 'alternatif.store', 'alternatif.edit', 'alternatif.update', 'alternatif.destroy', 'alternatif.cetak',
-            'kriteria.index', 'kriteria.create', 'kriteria.store', 'kriteria.edit', 'kriteria.update', 'kriteria.destroy', 'kriteria.cetak',
-            'nilai.index', 'nilai.create', 'nilai.store', 'nilai.edit', 'nilai.update', 'nilai.destroy', 'nilai.cetak',
-            'hitung.index', 'hitung.maut', 'hitung.maut.cetak', 'hitung.waspas', 'hitung.waspas.cetak', 'hitung.hasil', 'hitung.hasil.cetak',
+            'user.index',
+            'user.create',
+            'user.store',
+            'user.edit',
+            'user.update',
+            'user.destroy',
+            'user.cetak',
+            'user.password',
+            'user.password.update',
+            'user.logout',
+            'user.profil',
+            'user.profil.update',
+            'kelas.index',
+            'kelas.create',
+            'kelas.store',
+            'kelas.edit',
+            'kelas.update',
+            'kelas.destroy',
+            'kelas.cetak',
+            'mapel.index',
+            'mapel.create',
+            'mapel.store',
+            'mapel.edit',
+            'mapel.update',
+            'mapel.destroy',
+            'mapel.cetak',
+            'topik.index',
+            'topik.create',
+            'topik.store',
+            'topik.edit',
+            'topik.update',
+            'topik.destroy',
+            'topik.cetak',
+            'guru.index',
+            'guru.create',
+            'guru.store',
+            'guru.edit',
+            'guru.update',
+            'guru.destroy',
+            'guru.cetak',
+            'alternatif.index',
+            'alternatif.create',
+            'alternatif.store',
+            'alternatif.edit',
+            'alternatif.update',
+            'alternatif.destroy',
+            'alternatif.cetak',
+            'kriteria.index',
+            'kriteria.create',
+            'kriteria.store',
+            'kriteria.edit',
+            'kriteria.update',
+            'kriteria.destroy',
+            'kriteria.cetak',
+            'nilai.index',
+            'nilai.create',
+            'nilai.store',
+            'nilai.edit',
+            'nilai.update',
+            'nilai.destroy',
+            'nilai.cetak',
+            'maut.index',
+            'maut.maut',
+            'maut.maut.cetak',
+            'maut.waspas',
+            'maut.waspas.cetak',
+            'maut.hasil',
+            'maut.hasil.cetak',
         ],
         'user' => [
             'home.dashboard',
-            'user.password', 'user.password.update', 'user.logout', 'user.profil', 'user.profil.update',
-            'hitung.hasil', 'hitung.hasil.cetak',
+            'user.password',
+            'user.password.update',
+            'user.logout',
+            'user.profil',
+            'user.profil.update',
+            'maut.hasil',
+            'maut.hasil.cetak',
         ],
         'guest' => [
-            'home.public', 'tentang',
+            'home.public',
+            'tentang',
         ]
     ];
     $user = Auth::user();
@@ -164,7 +228,7 @@ function kode_oto($field, $table, $prefix, $length)
 {
     $var = get_var("SELECT $field FROM $table WHERE $field REGEXP '{$prefix}[0-9]{{$length}}' ORDER BY $field DESC");
     if ($var) {
-        return $prefix . substr(str_repeat('0', $length) . ((int)substr($var, -$length) + 1), -$length);
+        return $prefix . substr(str_repeat('0', $length) . ((int) substr($var, -$length) + 1), -$length);
     } else {
         return $prefix . str_repeat('0', $length - 1) . 1;
     }
@@ -172,7 +236,7 @@ function kode_oto($field, $table, $prefix, $length)
 
 function get_row($sql = '')
 {
-    $rows =  DB::select($sql);
+    $rows = DB::select($sql);
     if ($rows)
         return $rows[0];
 }

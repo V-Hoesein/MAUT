@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\GuruController;
-use App\Http\Controllers\HitungController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
+use App\Http\Controllers\MautController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\TopikController;
 use App\Http\Controllers\UserController;
@@ -47,11 +47,9 @@ Route::middleware(['auth', 'level'])->group(
         Route::get('/nilai/cetak', [NilaiController::class, 'cetak'])->name('nilai.cetak');
         Route::resource('/nilai', NilaiController::class);
 
-        Route::get('/hitung/maut', [HitungController::class, 'maut'])->name('hitung.maut');
-        Route::get('/hitung/maut/cetak', [HitungController::class, 'maut_cetak'])->name('hitung.maut.cetak');
+        Route::get('/maut/cetak', [MautController::class, 'cetak'])->name('maut.cetak');
+        Route::resource('/maut', MautController::class);
 
-        Route::get('/hitung/hasil', [HitungController::class, 'hasil'])->name('hitung.hasil');
-        Route::get('/hitung/hasil/cetak', [HitungController::class, 'hasil_cetak'])->name('hitung.hasil.cetak');
 
         Route::get('/user/profil', [UserController::class, 'profil'])->name('user.profil');
         Route::post('/user/profil', [UserController::class, 'profilUpdate'])->name('user.profil.update');

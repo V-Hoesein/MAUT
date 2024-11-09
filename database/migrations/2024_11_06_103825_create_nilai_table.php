@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('model_belajar', ['pbl', 'ctl', 'pjbl', 'dl', 'ibl']);
             $table->string('variabel');
             $table->foreign('variabel')->references('nama')->on('variabel')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('nilai');
+            $table->double('nilai');
             $table->timestamps();
         });
     }

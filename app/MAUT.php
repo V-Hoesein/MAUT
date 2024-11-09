@@ -2,86 +2,98 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
+
 class MAUT
 {
-    public $rel_alternatif;
-    public $atribut;
-    public $bobot;
+    public function calculate(): array
+    {
+        $kelas = array_map(fn($kelas) => (array) $kelas, DB::table('kelas')->get()->toArray());
+        $mapel = array_map(fn($mapel) => (array) $mapel, DB::table('mapel')->get()->toArray());
+        $topik = array_map(fn($topik) => (array) $topik, DB::table('topik')->get()->toArray());
+        $model = ['pbl', 'pjbl', 'ctl', 'ibl', 'dl'];
+        $variabel = array_map(fn($variabel) => (array) $variabel, DB::table('variabel')->get()->toArray());
 
-    public $total, $rank, $terbobot, $normal, $bobot_normal, $minmax, $rata, $hasil;
+        $queryBuilder = [];
 
-    function __construct($rel_alternatif, $atribut, $bobot)
-    {
-        $this->rel_alternatif = $rel_alternatif;
-        $this->atribut = $atribut;
-        $this->bobot = $bobot;
-        $this->bobot_normal();
-        $this->normal();
-        $this->terbobot();
-        $this->total();
-        $this->hasil();
-        $this->rank();
-    }
-    function rank()
-    {
-        $temp = $this->total;
-        arsort($temp);
-        $no = 1;
-        $this->rank = array();
-        foreach ($temp as $key => $value) {
-            $this->rank[$key] = $no++;
-        }
-    }
-    function hasil()
-    {
-        $min = min($this->total);
-        $max = max($this->total);
-        $this->rata = $min + ($max - $min) / 2;
-        foreach ($this->total as $key => $val) {
-            $this->hasil[$key] = $val >= $this->rata ? 'Layak' : 'Tidak Layak';
-        }
-    }
-    function total()
-    {
-        $this->total = array();
-        foreach ($this->terbobot as $key => $val) {
-            $this->total[$key] = array_sum($val);
-        }
-    }
-    function terbobot()
-    {
-        $this->terbobot = array();
-        foreach ($this->normal as $key => $val) {
-            foreach ($val as $k => $v) {
-                $this->terbobot[$key][$k] = $v * $this->bobot_normal[$k];
+        foreach ($kelas as $kls) {
+
+            foreach ($mapel as $mpl) {
+                foreach ($topik as $tpk) {
+                    foreach ($model as $mdl) {
+                        foreach ($variabel as $vrb) {
+
+                            // Create a unique key based on the values to prevent duplicates
+                            $key = "{$kls['nama']}_{$mpl['nama']}_{$tpk['nama']}_{$mdl}_{$vrb['nama']}";
+
+                            // Only add if the key doesn't already exist
+                            if (!isset($queryBuilder[$key])) {
+                                $queryBuilder[$key] = [
+                                    'kelas' => $kls['nama'],
+                                    'mapel' => $mpl['nama'],
+                                    'topik' => $tpk['nama'],
+                                    'model' => $mdl,
+                                    'variabel' => $vrb['nama'],
+                                ];
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
-    function normal()
-    {
-        $arr = array();
-        foreach ($this->rel_alternatif as $key => $val) {
-            foreach ($val as $k => $v) {
-                $arr[$k][$key] = $v;
+
+        $queryBuilder = array_values($queryBuilder);
+        // var_dump($queryBuilder);
+
+        $minMax = [];
+
+        foreach ($queryBuilder as $key => $value) {
+            $dataMIN = DB::table('nilai as n')
+                ->select('n.*', DB::raw('n.nilai * 0.01 as nilai'), 's.nama', 's.kelas', 'g.nama as guru')
+                ->join('siswa as s', 'n.nis', '=', 's.nis')
+                ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
+                ->where('s.kelas', $value['kelas'])
+                ->where('n.mapel', $value['mapel'])
+                ->where('n.topik', $value['topik'])
+                ->where('n.model_belajar', $value['model'])
+                ->where('n.variabel', $value['variabel'])
+                ->orderBy('n.nilai', 'asc')
+                ->limit(1)
+                ->first();
+
+            $dataMAX = DB::table('nilai as n')
+                ->select('n.*', DB::raw('n.nilai * 0.01 as nilai'), 's.nama', 's.kelas', 'g.nama as guru')
+                ->join('siswa as s', 'n.nis', '=', 's.nis')
+                ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
+                ->where('s.kelas', $value['kelas'])
+                ->where('n.mapel', $value['mapel'])
+                ->where('n.topik', $value['topik'])
+                ->where('n.model_belajar', $value['model'])
+                ->where('n.variabel', $value['variabel'])
+                ->orderBy('n.nilai', 'desc')
+                ->limit(1)
+                ->first();
+
+            if ($dataMIN && $dataMAX) {
+                $found = [
+                    'mapel' => $dataMIN->mapel,
+                    'topik' => $dataMIN->topik,
+                    'model' => $dataMIN->model_belajar,
+                    'variabel' => $dataMIN->variabel,
+                    'kelas' => $dataMIN->kelas,
+                    'nilaiMIN' => $dataMIN->nilai,
+                    'nilaiMAX' => $dataMAX->nilai
+                ];
+
+                $minMax[] = $found;
             }
         }
-        foreach ($arr as $key => $val) {
-            $this->minmax[$key]['min'] = min($val);
-            $this->minmax[$key]['max'] = max($val);
-        }
-        foreach ($this->rel_alternatif as $key => $val) {
-            foreach ($val as $k => $v) {
-                $min = $this->minmax[$k]['min'];
-                $max = $this->minmax[$k]['max'];
-                $this->normal[$key][$k] = ($v - $min) / ($max - $min);
-            }
-        }
+
+        var_dump($minMax);
+
+        die;
+
+        return $queryBuilder;
     }
-    function bobot_normal()
-    {
-        $total = array_sum($this->bobot);
-        foreach ($this->bobot as $key => $val) {
-            $this->bobot_normal[$key] = $val / $total;
-        }
-    }
+
 }
