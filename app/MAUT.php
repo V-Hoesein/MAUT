@@ -7,12 +7,33 @@ class MAUT
 {
     public function calculate(): array
     {
-        $kelas = array_map(fn($kelas) => (array) $kelas, DB::table('kelas')->get()->toArray());
-        $mapel = array_map(fn($mapel) => (array) $mapel, DB::table('mapel')->get()->toArray());
-        $topik = array_map(fn($topik) => (array) $topik, DB::table('topik')->get()->toArray());
+        $kelas = $this->fetchData('kelas');
+        $mapel = $this->fetchData('mapel');
+        $topik = $this->fetchData('topik');
         $model = ['pbl', 'pjbl', 'ctl', 'ibl', 'dl'];
-        $variabel = array_map(fn($variabel) => (array) $variabel, DB::table('variabel')->get()->toArray());
+        $variabel = $this->fetchData('variabel');
 
+        $queryBuilder = $this->buildQueryKeys($kelas, $mapel, $topik, $model, $variabel);
+        $minMax = $this->calculateMinMaxValues($queryBuilder);
+        $nilai = $this->normalizeValues($minMax, $variabel);
+        $totalMAUT = $this->calculateTotalMAUT($nilai);
+        $averageMAUT = $this->calculateAverageMAUT($totalMAUT);
+
+        return [
+            'minMax' => $minMax,
+            'nilai' => $nilai,
+            'totalMAUT' => $totalMAUT,
+            'averageMAUT' => $averageMAUT,
+        ];
+    }
+
+    private function fetchData(string $table): array
+    {
+        return array_map(fn($item) => (array) $item, DB::table($table)->get()->toArray());
+    }
+
+    private function buildQueryKeys(array $kelas, array $mapel, array $topik, array $model, array $variabel): array
+    {
         $queryBuilder = [];
 
         foreach ($kelas as $kls) {
@@ -21,54 +42,32 @@ class MAUT
                     foreach ($model as $mdl) {
                         foreach ($variabel as $vrb) {
                             $key = "{$kls['nama']}_{$mpl['nama']}_{$tpk['nama']}_{$mdl}_{$vrb['nama']}";
-                            if (!isset($queryBuilder[$key])) {
-                                $queryBuilder[$key] = [
-                                    'kelas' => $kls['nama'],
-                                    'mapel' => $mpl['nama'],
-                                    'topik' => $tpk['nama'],
-                                    'model' => $mdl,
-                                    'variabel' => $vrb['nama'],
-                                ];
-                            }
+                            $queryBuilder[$key] = [
+                                'kelas' => $kls['nama'],
+                                'mapel' => $mpl['nama'],
+                                'topik' => $tpk['nama'],
+                                'model' => $mdl,
+                                'variabel' => $vrb['nama'],
+                            ];
                         }
                     }
                 }
             }
         }
 
-        $queryBuilder = array_values($queryBuilder);
+        return array_values($queryBuilder);
+    }
 
+    private function calculateMinMaxValues(array $queryBuilder): array
+    {
         $minMax = [];
 
-        foreach ($queryBuilder as $key => $value) {
-            $dataMIN = DB::table('nilai as n')
-                ->select('n.*', DB::raw('n.nilai * 0.01 as nilai'), 's.nama', 's.kelas', 'g.nama as guru')
-                ->join('siswa as s', 'n.nis', '=', 's.nis')
-                ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
-                ->where('s.kelas', $value['kelas'])
-                ->where('n.mapel', $value['mapel'])
-                ->where('n.topik', $value['topik'])
-                ->where('n.model_belajar', $value['model'])
-                ->where('n.variabel', $value['variabel'])
-                ->orderBy('n.nilai', 'asc')
-                ->limit(1)
-                ->first();
-
-            $dataMAX = DB::table('nilai as n')
-                ->select('n.*', DB::raw('n.nilai * 0.01 as nilai'), 's.nama', 's.kelas', 'g.nama as guru')
-                ->join('siswa as s', 'n.nis', '=', 's.nis')
-                ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
-                ->where('s.kelas', $value['kelas'])
-                ->where('n.mapel', $value['mapel'])
-                ->where('n.topik', $value['topik'])
-                ->where('n.model_belajar', $value['model'])
-                ->where('n.variabel', $value['variabel'])
-                ->orderBy('n.nilai', 'desc')
-                ->limit(1)
-                ->first();
+        foreach ($queryBuilder as $value) {
+            $dataMIN = $this->fetchMinMaxData($value, 'asc');
+            $dataMAX = $this->fetchMinMaxData($value, 'desc');
 
             if ($dataMIN && $dataMAX) {
-                $found = [
+                $minMax[] = [
                     'mapel' => $dataMIN->mapel,
                     'topik' => $dataMIN->topik,
                     'model' => $dataMIN->model_belajar,
@@ -77,11 +76,30 @@ class MAUT
                     'nilaiMIN' => $dataMIN->nilai,
                     'nilaiMAX' => $dataMAX->nilai
                 ];
-
-                $minMax[] = $found;
             }
         }
 
+        return $minMax;
+    }
+
+    private function fetchMinMaxData(array $value, string $order): ?object
+    {
+        return DB::table('nilai as n')
+            ->select('n.*', DB::raw('n.nilai * 0.01 as nilai'), 's.nama', 's.kelas', 'g.nama as guru')
+            ->join('siswa as s', 'n.nis', '=', 's.nis')
+            ->join('guru as g', 'n.nip_guru', '=', 'g.nip')
+            ->where('s.kelas', $value['kelas'])
+            ->where('n.mapel', $value['mapel'])
+            ->where('n.topik', $value['topik'])
+            ->where('n.model_belajar', $value['model'])
+            ->where('n.variabel', $value['variabel'])
+            ->orderBy('n.nilai', $order)
+            ->limit(1)
+            ->first();
+    }
+
+    private function normalizeValues(array $minMax, array $variabel): array
+    {
         $nilai = json_decode(json_encode(
             DB::table('nilai as n')
                 ->select('s.kelas', 'n.mapel', 'g.nama as nama_guru', 'n.topik', 'n.model_belajar', 'n.variabel', 's.nama as nama_siswa', DB::raw('n.nilai * 0.01 as nilai'))
@@ -91,35 +109,51 @@ class MAUT
         ), true);
 
         foreach ($nilai as &$entry) {
-            foreach ($minMax as $range) {
-                if (
-                    $entry['kelas'] === $range['kelas'] &&
-                    $entry['mapel'] === $range['mapel'] &&
-                    $entry['topik'] === $range['topik'] &&
-                    $entry['model_belajar'] === $range['model'] &&
-                    $entry['variabel'] === $range['variabel']
-                ) {
-                    $nilaiMIN = $range['nilaiMIN'];
-                    $nilaiMAX = $range['nilaiMAX'];
-
-                    if ($nilaiMAX != $nilaiMIN) {
-                        $entry['nilai_normalized'] = ($entry['nilai'] - $nilaiMIN) / ($nilaiMAX - $nilaiMIN);
-                    } else {
-                        $entry['nilai_normalized'] = 0;
-                    }
-                    break;
-                }
-            }
-
-            foreach ($variabel as $vrb) {
-                if ($entry['variabel'] === $vrb['nama']) {
-                    $entry['weighted_value'] = $entry['nilai_normalized'] * $vrb['bobot'];
-                    break;
-                }
-            }
+            $this->applyNormalization($entry, $minMax);
+            $this->applyWeighting($entry, $variabel);
         }
 
-        // Menghitung nilai total MAUT untuk setiap kombinasi kelas, mapel, topik, dan model_belajar
+        return $nilai;
+    }
+
+    private function applyNormalization(array &$entry, array $minMax): void
+    {
+        foreach ($minMax as $range) {
+            if ($this->isMatchingRange($entry, $range)) {
+                $entry['nilai_normalized'] = $this->normalizeValue($entry['nilai'], $range['nilaiMIN'], $range['nilaiMAX']);
+                break;
+            }
+        }
+    }
+
+    private function isMatchingRange(array $entry, array $range): bool
+    {
+        return (
+            $entry['kelas'] === $range['kelas'] &&
+            $entry['mapel'] === $range['mapel'] &&
+            $entry['topik'] === $range['topik'] &&
+            $entry['model_belajar'] === $range['model'] &&
+            $entry['variabel'] === $range['variabel']
+        );
+    }
+
+    private function normalizeValue(float $nilai, float $nilaiMIN, float $nilaiMAX): float
+    {
+        return $nilaiMAX != $nilaiMIN ? ($nilai - $nilaiMIN) / ($nilaiMAX - $nilaiMIN) : 0;
+    }
+
+    private function applyWeighting(array &$entry, array $variabel): void
+    {
+        foreach ($variabel as $vrb) {
+            if ($entry['variabel'] === $vrb['nama']) {
+                $entry['weighted_value'] = $entry['nilai_normalized'] * $vrb['bobot'];
+                break;
+            }
+        }
+    }
+
+    private function calculateTotalMAUT(array $nilai): array
+    {
         $totalMAUT = [];
 
         foreach ($nilai as $entry) {
@@ -138,7 +172,11 @@ class MAUT
             $totalMAUT[$key]['total_weighted_value'] += $entry['weighted_value'];
         }
 
-        // Menghitung rata-rata nilai MAUT per model_belajar
+        return $totalMAUT;
+    }
+
+    private function calculateAverageMAUT(array $totalMAUT): array
+    {
         $averageMAUT = [];
 
         foreach ($totalMAUT as $entry) {
@@ -160,15 +198,8 @@ class MAUT
             $entry['average_value'] = $entry['total_value'] / $entry['count'];
         }
 
-        // Mengurutkan model belajar berdasarkan nilai rata-rata tertinggi
         usort($averageMAUT, fn($a, $b) => $b['average_value'] <=> $a['average_value']);
 
-
-        return [
-            'minMax' => $minMax,
-            'nilai' => $nilai,
-            'totalMAUT' => $totalMAUT,
-            'averageMAUT' => $averageMAUT,
-        ];
+        return $averageMAUT;
     }
 }
