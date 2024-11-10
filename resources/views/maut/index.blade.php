@@ -278,10 +278,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            paginateTable('tableMinMax', 'paginationMinMax', 10);
-            paginateTable('tableUtility', 'paginationUtility', 10);
-            paginateTable('tableTotalMAUT', 'paginationTotalMAUT', 10);
-            paginateTable('tableAverageMAUT', 'paginationAverageMAUT', 10);
+            paginateTable('tableMinMax', 'paginationMinMax', 50);
+            paginateTable('tableUtility', 'paginationUtility', 50);
+            paginateTable('tableTotalMAUT', 'paginationTotalMAUT', 50);
+            paginateTable('tableAverageMAUT', 'paginationAverageMAUT', 50);
         });
     </script>
 @endsection
