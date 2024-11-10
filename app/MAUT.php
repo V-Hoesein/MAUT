@@ -17,7 +17,14 @@ class MAUT
         $minMax = $this->calculateMinMaxValues($queryBuilder);
         $nilai = $this->normalizeValues($minMax, $variabel);
         $totalMAUT = $this->calculateTotalMAUT($nilai);
-        $averageMAUT = $this->calculateAverageMAUT($totalMAUT);
+
+        // Use calculateAverageByModelBelajar to get averages and max values
+        $averageMAUT = $this->calculateAverageByModelBelajar($totalMAUT);
+
+        // Optional: Sort averages by 'average_value' in descending order
+        usort($averageMAUT['averages'], function ($a, $b) {
+            return $b['average_value'] <=> $a['average_value'];
+        });
 
         return [
             'minMax' => $minMax,
@@ -26,6 +33,61 @@ class MAUT
             'averageMAUT' => $averageMAUT,
         ];
     }
+
+    /**
+     * Calculate average values by model and identify the highest model per mapel.
+     */
+    private function calculateAverageByModelBelajar($data)
+    {
+        $averages = [];
+        $maxValuesByMapel = [];
+
+        foreach ($data as $values) {
+            $mapel = $values['mapel'];
+            $modelBelajar = $values['model_belajar'];
+            $totalWeightedValue = $values['total_weighted_value'];
+
+            $uniqueKey = $mapel . '_' . $modelBelajar;
+
+            if (!isset($averages[$uniqueKey])) {
+                $averages[$uniqueKey] = [
+                    'mapel' => $mapel,
+                    'model_belajar' => $modelBelajar,
+                    'total_value' => 0,
+                    'count' => 0,
+                ];
+            }
+
+            $averages[$uniqueKey]['total_value'] += $totalWeightedValue;
+            $averages[$uniqueKey]['count']++;
+        }
+
+        $results = [];
+        foreach ($averages as $values) {
+            $average = $values['total_value'] / $values['count'];
+            $results[] = [
+                'mapel' => $values['mapel'],
+                'model_belajar' => $values['model_belajar'],
+                'total_value' => $values['total_value'],
+                'count' => $values['count'],
+                'average_value' => $average,
+            ];
+
+            // Track the highest average value for each mapel
+            if (!isset($maxValuesByMapel[$values['mapel']]) || $average > $maxValuesByMapel[$values['mapel']]['average_value']) {
+                $maxValuesByMapel[$values['mapel']] = [
+                    'model_belajar' => $values['model_belajar'],
+                    'average_value' => $average,
+                ];
+            }
+        }
+
+        return [
+            'averages' => $results,
+            'maxValuesByMapel' => $maxValuesByMapel,
+        ];
+    }
+
 
     private function fetchData(string $table): array
     {

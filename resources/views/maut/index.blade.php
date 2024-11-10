@@ -161,14 +161,11 @@
             </div>
         </div>
         <div class="card-body p-0 table-responsive">
-            @php
-                // Find the highest average_value in the array for conditional highlighting
-                $maxAverageValue = max(array_column($rows['averageMAUT'], 'average_value'));
-            @endphp
             <table id="tableAverageMAUT" class="table table-bordered table-hover table-striped m-0">
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Mapel</th>
                         <th>Model Belajar</th>
                         <th>Total Value</th>
                         <th>Count</th>
@@ -176,9 +173,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($rows['averageMAUT'] as $key => $row)
-                        <tr class="{{ $row['average_value'] == $maxAverageValue ? 'highlight-row' : '' }}">
+                    @foreach (collect($rows['averageMAUT']['averages'])->sortByDesc('average_value') as $key => $row)
+                        <tr
+                            class="{{ $rows['averageMAUT']['maxValuesByMapel'][$row['mapel']]['model_belajar'] == $row['model_belajar'] ? 'highlight-row text-success' : '' }}">
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $row['mapel'] }}</td>
                             <td>{{ $row['model_belajar'] }}</td>
                             <td>{{ round($row['total_value'], 3) }}</td>
                             <td>{{ $row['count'] }}</td>
@@ -192,13 +191,14 @@
     </div>
 
 
+
     <style>
         .highlight-row {
             background-color: #d4edda;
-            /* Light green background */
+            /* Background hijau muda */
             color: #155724;
-            font-weight: 900;
-            /* Dark green text */
+            font-weight: bolder;
+            /* Teks hijau tua */
         }
 
 
