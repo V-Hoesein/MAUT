@@ -63,4 +63,3 @@ Route::middleware(['auth', 'level'])->group(
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');
 Route::post('/login', [UserController::class, 'loginAction'])->name('login.action');
 Route::get('/', [HomeController::class, 'show'])->name('home');
-Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');

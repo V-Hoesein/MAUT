@@ -29,10 +29,4 @@ class HomeController extends Controller
             return view('home', compact('title'));
         }
     }
-    public function tentang()
-    {
-
-        $title = 'Tentang';
-        return view('tentang', compact('title'));
-    }
 }

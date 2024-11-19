@@ -23,7 +23,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
@@ -101,12 +101,6 @@
                 <a class="nav-link" href="{{ route('maut.index') }}">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>MAUT</span></a>
-            </li>
-
-            <li class="nav-item" {{ is_hidden('tentang') }}>
-                <a class="nav-link" href="{{ route('tentang') }}">
-                    <i class="fas fa-fw fa-info"></i>
-                    <span>Tentang</span></a>
             </li>
 
             <!-- Divider -->

@@ -90,7 +90,6 @@ function is_able($action)
         ],
         'guest' => [
             'home.public',
-            'tentang',
         ]
     ];
     $user = Auth::user();
