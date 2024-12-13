@@ -4326,8 +4326,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
 -- Dumping data for table maut.tb_user: ~2 rows (approximately)
 DELETE FROM `tb_user`;
 INSERT INTO `tb_user` (`id_user`, `nama_user`, `username`, `password`, `level`, `status_user`, `created_at`, `updated_at`) VALUES
-	(1, 'Administrator', 'admin', '$2y$10$qZRVuKnqDveIbIRRCrhn2uC/uu1YqtL/cvzg2OGJkKp3yGsnFcgkS', 'Admin', 1, NULL, NULL),
-	(2, 'Manager', 'manager', '$2y$10$LijyAEdz1v8cOiWGTA4TO.5Fz85i6JXpLlzcOUuWbuHNNt0pxqZvy', 'Manager', 1, NULL, NULL);
+	(1, 'Administrator', 'admin', '$2y$10$qZRVuKnqDveIbIRRCrhn2uC/uu1YqtL/cvzg2OGJkKp3yGsnFcgkS', 'Admin', 1, NULL, NULL);
 
 -- Dumping structure for table maut.topik
 CREATE TABLE IF NOT EXISTS `topik` (

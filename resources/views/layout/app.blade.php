@@ -49,11 +49,11 @@
                     <span>Home</span></a>
             </li>
 
-            <li class="nav-item" {{ is_hidden('user.index') }}>
+            <!-- <li class="nav-item" {{ is_hidden('user.index') }}>
                 <a class="nav-link" href="{{ route('user.index') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>User</span></a>
-            </li>
+            </li> -->
 
             <li class="nav-item" {{ is_hidden('kelas.index') }}>
                 <a class="nav-link" href="{{ route('kelas.index') }}">
